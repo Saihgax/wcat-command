@@ -2,22 +2,22 @@ let fs = require("fs");
 let inputArr = process.argv.slice(2);
 
 
-let filesArr = inputArr;
+// let filesArr = inputArr;
 
-for(let i=0;i<filesArr.length;i++){
-    let ans = fs.existsSync(filesArr[i]);
-    if(ans==false){
-        console.log("File doesn't exist");
-        return;
-    }
-}
+// for(let i=0;i<filesArr.length;i++){
+//     let ans = fs.existsSync(filesArr[i]);
+//     if(ans==false){
+//         console.log("File doesn't exist");
+//         return;
+//     }
+// }
 
-let content = "";
-for(let i=0;i<filesArr.length;i++){
-    content += fs.readFileSync(filesArr[i]);
-}
+// let content = "";
+// for(let i=0;i<filesArr.length;i++){
+//     content += fs.readFileSync(filesArr[i]);
+// }
 
-console.log(content);
+// console.log(content);
 
 
                         /* Above prints the contents of the files given as input */
@@ -48,11 +48,20 @@ for(let i=0;i<filesArr.length;i++){
     }
 }
 
-//check for both commands simultaneously
+//check for both commands simultaneously and declare final idx
+
 let isBothPresent = optionsArr.includes("-b") && optionsArr.includes("-n");
+let finalOpt = ""
+
 if (isBothPresent==true) {
-    console.log("either enter -n or -b option");
-    return;
+    let indexOfN = optionsArr.indexOf("-n");
+    let indexOfB = optionsArr.indexOf("-b");
+    if(indexOfN<indexOfB){
+        finalOpt = "-n";
+    }
+    else{
+        finalOpt = "-b";
+    }
 }
 
 
@@ -65,8 +74,7 @@ let contentArr = content.split("\r\n"); // Content Array is made
 
 //-s check (Converts big line breaks to singular line breaks)
 
-let isSPresent = optionsArr.includes("-s");
-if(isSPresent){
+if(optionsArr.includes("-s")){
     for(let i=1;i<contentArr.length;i++){
         if(contentArr[i] == "" && contentArr[i-1]==""){
             contentArr[i] = null;
@@ -89,8 +97,8 @@ if(isSPresent){
 
 // -n check (Gives numbering to all lines)
 
-let isNPresent = optionsArr.includes("-n");
-if(isNPresent){
+
+if(optionsArr.includes("-n")){
     for(let i=0;i<contentArr.length;i++){
         contentArr[i] = `${i+1} ${contentArr[i]}` 
     }
@@ -100,8 +108,7 @@ if(isNPresent){
 
 // -b check (Gives numbering to non-empty lines)
 
-let isBPresent = optionsArr.includes("-b");
-if(isBPresent){
+if(optionsArr.includes("-b")){
     let counter = 1;
     for(let i=0;i<contentArr.length;i++){
         if(contentArr[i]!=""){
